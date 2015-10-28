@@ -4,15 +4,8 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.Random;
 
-// http://www.t1shopper.com/tools/nslookup/result/
-// 132.206.85.18 mcgill 
-// 208.109.255.26 stackoverflow.com no recursive
-// 132.204.8.207 mcgill.ca is auth
-/**
- * Hello
- * @author mac
- *
- */
+// Create and send the DNS request.
+// Prints the results
 public class DnsClient
 {
 	static int timeOut = 5;
@@ -68,6 +61,8 @@ public class DnsClient
 		}
 	}
 
+	// Read the arguments given by the user.
+	// Return true if no error was found while reading the parameters.
 	public static boolean simpleCommandLineArgParser(String[] args)
 	{
 		if (args.length < 2)
@@ -219,6 +214,8 @@ public class DnsClient
 		return parseIpAddress(args[args.length - 2]);
 	}
 
+	// Convert the parameter from string to integer.
+	// Return the value of the parameter. If the parameter is not a number return 0.
 	public static int getParameterValue(String parameter, String value) 
 	{
 		int number = 0;
@@ -236,6 +233,9 @@ public class DnsClient
 		return number;
 	}
 
+	// Validates the IP address given by the user.
+	// If the IP address is valid, convert it to bytes and stored it in a global variable.
+	// Return true if the IP address is valid, false otherwise.
 	public static boolean parseIpAddress(String ipString)
 	{
 		if (ipString.startsWith("@"))
@@ -271,6 +271,8 @@ public class DnsClient
 		return true;
 	}
 
+	// Send the DNS question to the client and wait for a response
+	// Return the response from the server. Return null if we didn't receive any response
 	public static byte[] dnsLookup(byte[] dnsRequest) throws Exception
 	{
 		// Create a UDP socket
@@ -332,6 +334,8 @@ public class DnsClient
 		return answer;
 	}
 
+	// Create the request by merging the DNS header and the DNS question arrays.
+	// Return the DNS request.
 	public static byte[] createRequest(byte[] header, byte[] dnsQuestion)
 	{
 		byte[] dnsRequest = new byte[header.length + dnsQuestion.length];
@@ -349,6 +353,8 @@ public class DnsClient
 		return dnsRequest;
 	}
 
+	// Creates the DNS header by filling a byte array with the right values.
+	// Return the DNS header
 	public static byte[] createDnsHeader()
 	{
 		byte[] header = new byte[HEADER_BUFFER_SIZE];
@@ -387,6 +393,8 @@ public class DnsClient
 		return header;
 	}
 
+	// Create the DNS question by
+	// Return the DNS question
 	public static byte[] createDnsQuestion()
 	{
 		String[] domainSplit = domainName.split("\\.");
@@ -466,6 +474,8 @@ public class DnsClient
 		return dnsQuestion;
 	}
 
+	// Read the response from the server
+	// Return true if no error was found in the response, false otherwise
 	public static boolean readDnsAnswer(int dnsQuestionLength)
 	{
 		// TODO: do we need to check if the message is a response or not???
@@ -575,6 +585,7 @@ public class DnsClient
 		return true;
 	}
 	
+	// Print the results in the terminal.
 	public static void printResults()
 	{
 		System.out.println("DnsClient sending request for " + domainName);
@@ -600,7 +611,8 @@ public class DnsClient
 			}
 		}
 	}
-	
+
+	// Format the results before printing them in order to meet lab requirements
 	public static void printFormattedAnswer(DnsAnswerValues answer)
 	{
 		if (answer.getTYPE() == 0x01)
@@ -624,6 +636,7 @@ public class DnsClient
 		}
 	}
 	
+	// Get the DNS request type as a string. 
 	public static String getRequestType()
 	{
 		String type = "";
@@ -646,6 +659,7 @@ public class DnsClient
 		return type;
 	}
 	
+	// Code use for testing purposes. 
 	public static void debugPrintByteArray(byte[] array, int startIndex, int endIndex, String label)
 	{
 		if (startIndex >= endIndex)

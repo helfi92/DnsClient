@@ -1,6 +1,6 @@
 import java.io.UnsupportedEncodingException;
 
-
+// Store DNS response values
 public class DnsAnswerValues 
 {
 	private byte[] dnsAnswer = null;
@@ -15,12 +15,14 @@ public class DnsAnswerValues
 	private String domainIp = "";
 	private String record = "";
 
+	// Constructor
 	public DnsAnswerValues(byte[] dnsAnswer, int beginDataIndex)
 	{
 		this.dnsAnswer = dnsAnswer;
 		this.beginDataIndex = beginDataIndex;
 	}
 
+	// Read and store the values contained in one DNS response
 	public void ReadDnsResponse()
 	{		
 		int offset = beginDataIndex;
@@ -109,6 +111,8 @@ public class DnsAnswerValues
 		}
 	}
 	
+	// Convert bytes to ASCII encoding.
+	// This function also handles pointer for DNS compression.
 	public static String byteArrayToDomainName(int offset, byte[] array)
 	{
 		String str = "";
@@ -159,6 +163,7 @@ public class DnsAnswerValues
 		return str;
 	}
 	
+	// Merge two bytes to create a 16-bit number 
 	public static short mergeTwoBytes(byte left, byte right)
 	{
 		short value = (short) (left & 0xff);
@@ -167,6 +172,7 @@ public class DnsAnswerValues
 		return (short)(value | (right & 0xff));
 	}
 
+	// merge four bytes to create a 32-bit number
 	public static int mergeFourBytes(byte one, byte two, byte three, byte four)
 	{
 		int value = (one & 0xff);
@@ -183,11 +189,14 @@ public class DnsAnswerValues
 		return value;
 	}
 	
+	// Check if a byte is a pointer or not.
+	// Return true if the value is a pointer, false otherwise.
 	public static boolean isPointer(byte value)
 	{
 		return ((value & 0xc0) == 0xc0);
 	}
 	
+	// Convert a decimal value to its hexadecimal representation
 	public static String numberToHexString(int n, String format) 
 	{
 	    return String.format(format, Integer.toHexString(n)).replace(' ', '0');
